@@ -21,8 +21,7 @@
 ###
 
 <div align="center">
-  ![image](home/kali/Pictures/Screenshots/firstimg.png)
-  <img height="406" src="home/kali/Pictures/Screenshots/firstimg.png"  />
+ https://github.com/Dev-axay18/remove.it/issues/1#issue-2576512426
 </div>
 
 ###
