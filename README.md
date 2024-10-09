@@ -21,7 +21,7 @@
 ###
 
 <div align="center">
-<img src>
+<img src="firstimg.png">
 
 </div>
 
@@ -32,7 +32,7 @@
 ###
 
 <div align="center">
-  <img height="406" src="file:///home/kali/Pictures/Screenshots/secondimg.png"  />
+  <img src="secondimg.png"/>
 </div>
 
 ###
