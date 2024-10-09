@@ -21,7 +21,7 @@
 ###
 
 <div align="center">
- https://github.com/Dev-axay18/remove.it/issues/1#issue-2576512426
+![firstimg](https://github.com/user-attachments/assets/676c6858-c3d9-4736-bad7-1a123168be27)
 </div>
 
 ###
