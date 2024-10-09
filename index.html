@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Remove.it</title>
+    <style>
+        :root {
+            --background-color: #e0f7fa;
+            --text-color: #333;
+            --button-background: linear-gradient(135deg, #6EE7B7 0%, #3B82F6 100%);
+        }
+
+        .dark-mode {
+            --background-color: #333;
+            --text-color: #e0f7fa;
+            --button-background: linear-gradient(135deg, #F06292 0%, #FFB74D 100%);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .image-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .image-preview h3 {
+            margin-bottom: 10px;
+            color: var(--text-color); /* Use variable for text color */
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button, input[type="file"] {
+            background: var(--button-background);
+            border: none;
+            padding: 12px 24px;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        button:hover, input[type="file"]:hover {
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        input[type="file"] {
+            background: linear-gradient(135deg, #FFB74D 0%, #F06292 100%);
+            color: #fff;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+        }
+
+        input[type="file"]::file-selector-button {
+            display: none;
+        }
+
+        label[for="image-upload"] {
+            cursor: pointer;
+            background: linear-gradient(135deg, #FFB74D 0%, #F06292 100%);
+            padding: 12px 24px;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 50px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        label[for="image-upload"]:hover {
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .image-preview {
+                margin: 20px 0;
+            }
+        }
+
+        img.mainlogo {
+            height: 800px;
+            width: 900px;
+            position: absolute;
+            opacity: 50%;
+            z-index: -1;
+        }
+
+        .dark-mode .image-preview h3 {
+            color: #000000; /* Change to light color in dark mode */
+        }
+        .footer {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .footer p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+    </style>
+     <link rel="icon" href="https://media.istockphoto.com/id/1933412850/vector/vector-illustration-of-eraser.jpg?s=2048x2048&w=is&k=20&c=tVmAW6kZvC_mgFc3OEclOUdj0G8ey6sGiYgvWdH1CNc=" type="image/x-icon">
+</head>
+<body>
+    <button id="toggle-mode" style="position: absolute; top: 20px; right: 20px;">Toggle Dark Mode</button>
+    <h1>Remove.it</h1>
+    <img src="Screenshot_from_2024-10-09_21-11-23-removebg-preview.png" class="mainlogo">
+
+    <!-- File Upload Button -->
+    <label for="image-upload">Upload Image</label>
+    <input type="file" id="image-upload" accept="image/*" style="display: none;" />
+
+    <div class="container">
+        <!-- Original Image Preview -->
+        <div class="image-preview">
+            <h3>Original Image</h3>
+            <img id="original-image" src="" alt="Original Image" />
+        </div>
+
+        <!-- Processed Image Preview -->
+        <div class="image-preview">
+            <h3>Image without Background</h3>
+            <img id="processed-image" src="" alt="Processed Image" />
+            <button id="download-btn" style="display: none;">Download Image</button>
+        </div>
+    </div>
+
+    <script>
+        const originalImgElement = document.getElementById('original-image');
+        const processedImgElement = document.getElementById('processed-image');
+        const downloadBtn = document.getElementById('download-btn');
+        const imageUpload = document.getElementById('image-upload');
+        const toggleModeButton = document.getElementById('toggle-mode');
+
+        imageUpload.addEventListener('change', async function () {
+            const file = this.files[0];
+            if (file) {
+                // Display the original image
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    originalImgElement.src = event.target.result;
+                }
+                reader.readAsDataURL(file);
+
+                // Prepare data for API request
+                const formData = new FormData();
+                formData.append('image_file', file);
+                formData.append('size', 'auto');
+
+                try {
+                    // Call the Remove.bg API
+                    const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+                        method: 'POST',
+                        headers: {
+                            'X-Api-Key': '7M3TCJkKUNAhbTLz2chuUPwY', // Replace with your actual API key
+                        },
+                        body: formData
+                    });
+
+                    if (response.status != 200) {
+                        alert('Error: Unable to remove background. Please try again.');
+                        console.error('Error:', await response.text());
+                        return;
+                    }
+
+                    // Process the response and display the image without background
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    processedImgElement.src = url;
+                    downloadBtn.style.display = 'inline-block';
+
+                    // Set up the download button
+                    downloadBtn.onclick = function () {
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'removed-background.png';
+                        link.click();
+                    };
+
+                } catch (error) {
+                    alert('An error occurred while processing the image.');
+                    console.error('Error:', error);
+                }
+            }
+        });
+
+        toggleModeButton.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            
+            // Change button text based on mode
+            if (document.body.classList.contains('dark-mode')) {
+                toggleModeButton.textContent = 'Toggle Light Mode';
+            } else {
+                toggleModeButton.textContent = 'Toggle Dark Mode';
+            }
+        });
+    </script>
+
+    <footer class="footer">
+        <p>&copy; 2024 Akshay K. Kale. All Rights Reserved.</p>
+    </footer>
+    
+</body>
+</html>
